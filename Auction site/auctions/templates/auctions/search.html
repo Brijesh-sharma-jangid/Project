@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+{%block body%}
+
+<form action="{% url 'Category' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Select category :</label>
+        <select name="category" id="" required>
+            <option value="NO">NO Category</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Home">Home</option>
+            <option value="Electronic">Electronic</option>
+            <option value="Toys">Toys</option>
+        </select>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Search">
+</form>
+
+{% endblock %}

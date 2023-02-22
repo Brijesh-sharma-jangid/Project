@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+{%block body%}
+<h2>Category</h2>
+{% for list in list %}
+    <div class="col-md-15">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-0 shadow-sm h-md-250">
+            <div class="col-auto d-none d-lg-block">
+                <img src ='{{ list.urls }}' style="margin-left: 50%; margin-top: 5%; margin-bottom: 5%; max-width: 200px;"> </img> 
+            </div>
+            <div class="col p-4 d-flex flex-column position-static" style=" margin-left: 15%; max-height: 15px;" >
+            <strong class="d-inline-block mb-2 text-primary"><b>Price</b>- ${{ list.start_bid.amnt }}</strong>
+            <h3 class="mb-0">{{list.title}}</h3>
+            <p class="card-text">Created : {{list.time}}</p>
+            <a href="{% url 'listing' list.id %}" >For more details</a>
+          </div>
+        </div>
+      </div>
+      <br>
+      {% endfor %}
+
+{% endblock %}

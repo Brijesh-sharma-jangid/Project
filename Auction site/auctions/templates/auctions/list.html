@@ -1,0 +1,92 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if user.is_authenticated and list.isActive %}
+        {% if inlist %}
+        <div class="position-relative">
+            <form action="{% url 'removelist' list.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">Remove</button>
+            </form>
+        </div>
+        {%else%}
+        <div class="position-relative">
+            <form action="{% url 'addlist' list.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-success">Add</button>
+            </form>
+        </div>
+        {%endif%}
+    {%endif%}
+
+    {% if not list.isActive and user == list.start_bid.user %}
+        <div class="alert alert-success" role="alert">
+            Congratulations! You won
+        </div>
+    {%endif%}
+    
+<div class="col-md-20" style="width: 98%;">
+    <div class="position-relative">
+        <div class="position-relative top-0 start-0">
+            <h1 style="margin-left: 30px; margin-top: 15px; text-align:left;">{{list.title}}</h1>
+        </div>
+        {% if list.user == request.user and list.isActive %}
+        <div class="position-absolute top-0 end-0">
+            <form action="{% url 'Close' list.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Close</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <div class="row g-0 flex-md-row mb-0">
+        <div class="col-auto d-none d-lg-block">
+            <img src ='{{ list.urls }}' style="margin-left: 30px; margin-top: 5%; margin-bottom: 5%; max-width: 200px;"></img> 
+        </div>
+        <div class="col p-4 d-flex flex-column position-static" style=" margin-left: 15%; max-height: 15px;" >
+        <strong class="d-inline-block mb-2 text-primary"><span style="font-size: 30px;">${{ list.start_bid }}</span></strong>
+        <p class="card-text" style="margin-top: 10px;"><b>Description</b> : {{list.desc}}</p>
+        {% if msg %}
+        <p class="text-danger">
+            Invalid Number
+          </p>
+        {% endif %}
+        {% if user.is_authenticated and list.isActive %}
+        <form action="{% url 'listing' list.id %}" method="post" style="margin-top: 17px;">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="text" name="val1" placeholder="Bid">
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Place Bid</button>
+        </form>
+        {% endif %}
+        <h3 style="margin-top: 30px;" >Details</h3>
+        <ul>
+            <li>Listed by : {{ list.user }}</li>
+            <li>Category : {{ list.category }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  
+    <h2>Comment</h2>
+    <br>
+    {%if user.is_authenticated %}
+        <form action="{% url 'Comment' list.id %}" method="post">
+            {%csrf_token%}
+            <div class="form-group">
+                <input tyep="text" name="msg" placeholder="Add Comment">
+                <button type="submit" class="btn btn-warning">Add</button>
+            </div>
+            
+        </form>
+    {%endif%}
+    <ul class="list-group" style="width:247px;">
+        {%for con in comment%}
+            <li class="list-group-item"><strong>{{con.user}}</strong><br> {{con.msg}}</li>
+        {%endfor%}
+    </ul>
+  
+{% endblock %}
